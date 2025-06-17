@@ -1,9 +1,5 @@
 import { createClient } from "@/lib/supabase/server";
 
-interface User {
-  user_id: string;
-  username: string;
-}
 
 
 export default async function UsersDisplay() {

@@ -8,16 +8,30 @@ import { createClient } from '@/lib/supabase/server';
 import { revalidatePath } from 'next/cache'; // Used to clear the cache for a specific path after a mutation
 import { redirect } from 'next/navigation'; // Used to redirect users if unauthenticated
 
+// Define a type for the state returned by the server action
+interface FormState {
+  success: boolean;
+  message: string;
+}
+
+interface ProfileUpdateData {
+  username: string;
+  full_name: string;
+  avatar_url: string | null;
+  age: number | null;
+  gender: string | null;
+  updated_at: string; // ISO string format for timestamp
+}
 
 /**
  * Updates a user's profile information in the Supabase 'profiles' table.
  * This function is a Next.js Server Action, allowing it to be called directly from a form.
  *
- * @param {any} prevState The previous state returned by the useFormState hook (for form feedback).
+ * @param {FormState} prevState The previous state returned by the useFormState hook (for form feedback).
  * @param {FormData} formData The form data submitted from the client.
- * @returns {Promise<{ success: boolean; message: string; }>} An object indicating success/failure and a message.
+ * @returns {Promise<FormState>} An object indicating success/failure and a message.
  */
-export async function updateProfile(prevState: any, formData: FormData) {
+export async function updateProfile(prevState: FormState, formData: FormData): Promise<FormState> {
   // Initialize the Supabase client for server-side operations.
   const supabase = await createClient();
 
@@ -57,11 +71,16 @@ export async function updateProfile(prevState: any, formData: FormData) {
     return { success: false, message: 'Avatar URL must be a valid URL.' };
   }
 
-  // Prepare the data for update.
-  const updateData: { [key: string]: any } = {
+
+  // Prepare the data for update with the defined interface.
+  // Initialize with required fields and current timestamp.
+  const updateData: ProfileUpdateData = {
     username: username.trim(),
     full_name: fullName.trim(),
     updated_at: new Date().toISOString(), // Update the updated_at timestamp
+    avatar_url: null, // Default to null, will be updated if avatarUrl is provided
+    age: null,        // Default to null, will be updated if valid age is provided
+    gender: null      // Default to null, will be updated if gender is provided
   };
 
   // Conditionally add optional fields if they are provided and valid

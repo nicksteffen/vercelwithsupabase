@@ -8,6 +8,17 @@ import { useFormState, useFormStatus } from 'react-dom'; // Hooks for form state
 import { useEffect, useRef } from 'react'; // React hooks for side effects and ref management
 import { updateProfile } from './actions';
 
+
+// Define an interface for the profile data shape, matching your Supabase table schema
+interface ProfileData {
+  username: string | null;
+  full_name: string | null;
+  avatar_url: string | null;
+  age: number | null;
+  gender: string | null;
+  // Add other fields from your profiles table if they are included in initialData
+}
+
 /**
  * A client component to display a submit button that shows a loading indicator
  * when the form is being submitted via a Server Action.
@@ -48,7 +59,7 @@ function SubmitButton() {
  * @param {object} props - The component props.
  * @param {any} props.initialData - The initial profile data to populate the form (e.g., { username: '...', ... }).
  */
-export default function ProfileForm({ initialData }: { initialData: any }) {
+export default function ProfileForm({ initialData }: { initialData: ProfileData | null }) {
   // `useFormState` links the form to the `updateProfile` server action.
   // It manages the state returned by the server action (`state`) and provides a
   // new action dispatcher (`formAction`) to pass to the form's `action` prop.

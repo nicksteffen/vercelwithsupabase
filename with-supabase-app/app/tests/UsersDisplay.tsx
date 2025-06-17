@@ -8,7 +8,7 @@ const supabase = await createClient();
 const { data: users  } = await supabase
 // const { data: { users }, error } = await supabase
   .from("profiles")
-  .select("username, full_name");
+  .select("*");
 
 console.log("Users:", users);
 //   .select("user_id, username");   

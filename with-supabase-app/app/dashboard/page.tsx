@@ -14,7 +14,7 @@ export default async function DashboardPage() {
 
   // Redirect to login if user is not authenticated
   if (!user) {
-    redirect('/login');
+    redirect('/auth/login');
   }
 
   // Fetch the Stroop analysis results using the server action

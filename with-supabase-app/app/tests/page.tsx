@@ -4,24 +4,6 @@ import ActivityCard from "./ActivityCard";
 
 
 
-function activityCard(activity: Activity) {
-    // should look if parent id and nest under parent if so
-    return (
-        <>
-       <p>
-       { activity.name }
-       </p> 
-       <p> { activity.description } </p>
-       <a href={`/activities/${activity.activity_type}`}>  go to test</a>
-        </>
-
-    )
-
-
-
-}
-
-
 export default async function TestsPage() {
     const supabase = await createClient(); 
 
